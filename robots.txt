@@ -1,0 +1,22 @@
+# ConnectSphere — robots.txt
+# https://connectsphere.app
+
+User-agent: *
+Allow: /
+Allow: /feed
+Allow: /profile
+Allow: /friends
+Allow: /notifications
+Allow: /login
+Allow: /signup
+
+# Block sensitive or API routes from indexing
+Disallow: /api/
+Disallow: /uploads/
+Disallow: /_vite/
+
+# Crawl delay for politeness
+Crawl-delay: 10
+
+# Sitemaps
+Sitemap: https://connectsphere.app/sitemap.xml
