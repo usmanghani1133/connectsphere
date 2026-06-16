@@ -40,7 +40,7 @@ export default function Navbar({
     const delay = setTimeout(async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
+        const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const data = await res.json();

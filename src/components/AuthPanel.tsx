@@ -21,7 +21,7 @@ export default function AuthPanel({ onAuthSuccess }: AuthPanelProps) {
     setError("");
     setLoading(true);
 
-    const url = isLogin ? "/api/auth/login" : "/api/auth/register";
+    const url = isLogin ? (import.meta.env.VITE_API_URL || "") + "/api/auth/login" : (import.meta.env.VITE_API_URL || "") + "/api/auth/register";
     const payload = isLogin
       ? { usernameOrEmail: username, password }
       : { name, username, email, password };

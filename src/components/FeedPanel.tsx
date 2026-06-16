@@ -112,7 +112,7 @@ export default function FeedPanel({
     if (!isOpen && !commentsMap[postId]) {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch(`/api/comments/${postId}`, { headers: { Authorization: `Bearer ${token}` } });
+        const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/comments/${postId}`, { headers: { Authorization: `Bearer ${token}` } });
         const data = await res.json();
         if (data.comments) setCommentsMap(prev => ({ ...prev, [postId]: data.comments }));
       } catch (err) { console.error(err); }
@@ -132,7 +132,7 @@ export default function FeedPanel({
           reader.onload = () => resolve(reader.result as string);
           reader.readAsDataURL(files[i]);
         });
-        const uploadRes = await fetch("/api/media/upload", {
+        const uploadRes = await fetch((import.meta.env.VITE_API_URL || "") + "/api/media/upload", {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
           body: JSON.stringify({ fileData: base64, fileName: files[i].name, fileType: files[i].type })
@@ -158,7 +158,7 @@ export default function FeedPanel({
     setIsPosting(true);
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch("/api/posts", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/posts", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: newContent, type: mediaUrls.length > 0 ? mediaType : "text", mediaUrls, privacy })
@@ -177,7 +177,7 @@ export default function FeedPanel({
     setLikedAnimating(prev => ({ ...prev, [postId]: true }));
     setTimeout(() => setLikedAnimating(prev => ({ ...prev, [postId]: false })), 400);
     try {
-      const res = await fetch(`/api/posts/${postId}/like`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/posts/${postId}/like`, {
         method: "POST", headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -190,7 +190,7 @@ export default function FeedPanel({
     if (!text?.trim()) return;
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/comments/${postId}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/comments/${postId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: text })
@@ -207,7 +207,7 @@ export default function FeedPanel({
   const handleDeleteComment = async (postId: string, commentId: string) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/comments/${commentId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/comments/${commentId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         setCommentsMap(prev => ({ ...prev, [postId]: (prev[postId] || []).filter(c => c._id !== commentId) }));
         setPosts(prev => prev.map(p => p._id === postId ? { ...p, commentsCount: Math.max(0, (p.commentsCount || 1) - 1) } : p));
@@ -218,7 +218,7 @@ export default function FeedPanel({
   const handleUpdatePost = async (postId: string) => {
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/posts/${postId}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/posts/${postId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ content: editContent, privacy: editPrivacy })
@@ -232,7 +232,7 @@ export default function FeedPanel({
     if (!confirm("Delete this post permanently?")) return;
     const token = localStorage.getItem("token");
     try {
-      const res = await fetch(`/api/posts/${postId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/posts/${postId}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) { setPosts(prev => prev.filter(p => p._id !== postId)); setActiveMenuId(null); }
     } catch (err) { console.error(err); }
   };

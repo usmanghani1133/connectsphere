@@ -58,7 +58,7 @@ export default function ProfilePanel({
   const loadProfile = async () => {
     setLoading(true); setErrorHeader(null);
     try {
-      const res = await fetch(`/api/users/profile/${encodeURIComponent(targetUsername)}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/users/profile/${encodeURIComponent(targetUsername)}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
@@ -70,12 +70,12 @@ export default function ProfilePanel({
         } else throw new Error(data.error || "Failed to load profile.");
       } else {
         setProfileData(data.profile); setPrivacyState(data.profile.privacy);
-        const postsRes = await fetch("/api/posts/feed", { headers: { Authorization: `Bearer ${token}` } });
+        const postsRes = await fetch((import.meta.env.VITE_API_URL || "") + "/api/posts/feed", { headers: { Authorization: `Bearer ${token}` } });
         const postsData = await postsRes.json();
         if (postsRes.ok && postsData.feed) {
           setProfilePosts(postsData.feed.filter((p: Post) => p.username.toLowerCase() === targetUsername.toLowerCase()));
         }
-        const friendsRes = await fetch(`/api/friends/list/${encodeURIComponent(targetUsername)}`, {
+        const friendsRes = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/list/${encodeURIComponent(targetUsername)}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const friendsData = await friendsRes.json();
@@ -90,7 +90,7 @@ export default function ProfilePanel({
     const reader = new FileReader();
     const base64 = await new Promise<string>(resolve => { reader.onload = () => resolve(reader.result as string); reader.readAsDataURL(file); });
     try {
-      const uploadRes = await fetch("/api/media/upload", {
+      const uploadRes = await fetch((import.meta.env.VITE_API_URL || "") + "/api/media/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ fileData: base64, fileName: file.name, fileType: file.type })
@@ -113,7 +113,7 @@ export default function ProfilePanel({
   const handleUpdateProfileSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); setIsUpdating(true);
     try {
-      const res = await fetch("/api/users/profile/update", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/users/profile/update", {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ name: editName, bio: editBio, profilePicture: editProfilePic, coverPhoto: editCoverPic, privacy: editPrivacy })
@@ -130,7 +130,7 @@ export default function ProfilePanel({
 
   const handleSendFriendRequest = async () => {
     try {
-      const res = await fetch("/api/friends/request", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/friends/request", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ targetUsername })
@@ -145,7 +145,7 @@ export default function ProfilePanel({
     if (!profileData) return;
     if (!confirm(`Remove ${profileData.name} from your connections?`)) return;
     try {
-      const res = await fetch(`/api/friends/remove/${encodeURIComponent(targetUsername)}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/remove/${encodeURIComponent(targetUsername)}`, { method: "DELETE", headers: { Authorization: `Bearer ${token}` } });
       if (res.ok) {
         setProfileData((prev: any) => ({ ...prev, friendsCount: Math.max(0, (prev.friendsCount || 1) - 1), friends: (prev.friends || []).filter((f: string) => f !== currentUser.username) }));
         setProfileFriends(prev => prev.filter(f => f.username !== currentUser.username)); fetchConnections();

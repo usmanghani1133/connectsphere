@@ -134,7 +134,7 @@ export default function App() {
 
   const validateSession = async () => {
     try {
-      const res = await fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/auth/me", { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (res.ok && data.user) {
         setCurrentUser(data.user);
@@ -169,7 +169,7 @@ export default function App() {
   useEffect(() => {
     if (!currentUser || !token) return;
 
-    const newSocket = io(window.location.origin, { transports: ["websocket", "polling"] });
+    const newSocket = io(import.meta.env.VITE_API_URL || window.location.origin, { transports: ["websocket", "polling"] });
     setSocket(newSocket);
 
     newSocket.on("connect", () => {
@@ -245,7 +245,7 @@ export default function App() {
 
   const fetchFeed = async () => {
     try {
-      const res = await fetch("/api/posts/feed", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/posts/feed", { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (res.ok && data.feed) setPosts(data.feed);
     } catch (err) { console.error("Error fetching feed:", err); }
@@ -254,13 +254,13 @@ export default function App() {
   const fetchConnections = async () => {
     if (!currentUser) return;
     try {
-      const reqRes = await fetch("/api/friends/requests", { headers: { Authorization: `Bearer ${token}` } });
+      const reqRes = await fetch((import.meta.env.VITE_API_URL || "") + "/api/friends/requests", { headers: { Authorization: `Bearer ${token}` } });
       const reqData = await reqRes.json();
       if (reqRes.ok) {
         setIncomingRequests(reqData.incoming || []);
         setOutgoingRequests(reqData.outgoing || []);
       }
-      const listRes = await fetch(`/api/friends/list/${encodeURIComponent(currentUser.username)}`, {
+      const listRes = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/list/${encodeURIComponent(currentUser.username)}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const listData = await listRes.json();
@@ -270,7 +270,7 @@ export default function App() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await fetch("/api/notifications", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/notifications", { headers: { Authorization: `Bearer ${token}` } });
       const data = await res.json();
       if (res.ok && data.notifications) setNotifications(data.notifications);
     } catch (err) { console.error("Error fetching notifications:", err); }
@@ -283,7 +283,7 @@ export default function App() {
 
   const handleMarkNotifRead = async (id: string) => {
     try {
-      const res = await fetch(`/api/notifications/${id}/read`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/notifications/${id}/read`, {
         method: "PUT", headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
@@ -292,7 +292,7 @@ export default function App() {
 
   const handleMarkAllNotifsRead = async () => {
     try {
-      const res = await fetch("/api/notifications/read-all", {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + "/api/notifications/read-all", {
         method: "POST", headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) setNotifications(prev => prev.map(n => ({ ...n, isRead: true })));
@@ -301,7 +301,7 @@ export default function App() {
 
   const handleDeleteNotif = async (id: string) => {
     try {
-      const res = await fetch(`/api/notifications/${id}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/notifications/${id}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) setNotifications(prev => prev.filter(n => n._id !== id));
@@ -310,7 +310,7 @@ export default function App() {
 
   const handleAcceptInvite = async (reqId: string) => {
     try {
-      const res = await fetch(`/api/friends/requests/${reqId}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/requests/${reqId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status: "accepted" })
@@ -321,7 +321,7 @@ export default function App() {
 
   const handleRejectInvite = async (reqId: string) => {
     try {
-      const res = await fetch(`/api/friends/requests/${reqId}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/requests/${reqId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ status: "rejected" })
@@ -332,7 +332,7 @@ export default function App() {
 
   const handleUnfriendUser = async (friendUsername: string) => {
     try {
-      const res = await fetch(`/api/friends/remove/${encodeURIComponent(friendUsername)}`, {
+      const res = await fetch((import.meta.env.VITE_API_URL || "") + `/api/friends/remove/${encodeURIComponent(friendUsername)}`, {
         method: "DELETE", headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
