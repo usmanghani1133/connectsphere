@@ -1,0 +1,37 @@
+# Render.com Deployment Configuration
+# https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: connectsphere
+    runtime: node
+    region: oregon
+    plan: free
+
+    # Build the Vite frontend + bundle the Express server
+    buildCommand: npm install && npm run build
+
+    # Start the production server
+    startCommand: node dist/server.cjs
+
+    # Auto-deploy on every push to main branch
+    autoDeploy: true
+
+    # Health check endpoint
+    healthCheckPath: /api/health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false   # Set manually in Render dashboard — never commit secrets
+      - key: JWT_SECRET
+        sync: false   # Set manually in Render dashboard
+      - key: CLIENT_URL
+        sync: false   # Set to your Render app URL e.g. https://connectsphere.onrender.com
+      - key: CLOUDINARY_CLOUD_NAME
+        sync: false
+      - key: CLOUDINARY_API_KEY
+        sync: false
+      - key: CLOUDINARY_API_SECRET
+        sync: false

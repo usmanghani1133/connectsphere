@@ -1,0 +1,6 @@
+{
+  "name": "ConnectSphere",
+  "description": "A feature-rich social networking platform featuring real-time updates, secure JWT authentication, direct messaging, posts, comments, media preview sharing, friend requests, live online indicators, and personalized notifications.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

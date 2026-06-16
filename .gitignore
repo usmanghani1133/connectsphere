@@ -1,0 +1,22 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# Local JSON file database (dev only — production uses MongoDB Atlas)
+data/
+
+# Local media uploads (dev only — production uses Cloudinary)
+public/uploads/
+
+# OS and editor files
+Thumbs.db
+.vscode/
+.idea/
+
+# TypeScript build info
+*.tsbuildinfo

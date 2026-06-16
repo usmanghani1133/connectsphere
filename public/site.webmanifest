@@ -1,0 +1,53 @@
+{
+  "name": "ConnectSphere",
+  "short_name": "ConnectSphere",
+  "description": "A modern social networking platform for students — connect, share, and grow your campus community.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#080e1a",
+  "theme_color": "#6366f1",
+  "lang": "en",
+  "scope": "/",
+  "categories": ["social", "education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "My Feed",
+      "short_name": "Feed",
+      "description": "View your personalized social feed",
+      "url": "/feed",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "My Profile",
+      "short_name": "Profile",
+      "description": "View and edit your ConnectSphere profile",
+      "url": "/profile",
+      "icons": [{ "src": "/favicon.svg", "sizes": "any" }]
+    }
+  ]
+}
